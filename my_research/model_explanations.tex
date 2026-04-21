@@ -1,0 +1,50 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\title{Detailed Model Notes for a Darts-Based LTSF Benchmark}
+\date{}
+\begin{document}
+\maketitle
+
+\section{Benchmark scope and relation to arXiv:2205.13504v3}
+This benchmark follows the same nine datasets used in arXiv:2205.13504v3: ETTh1, ETTh2, ETTm1, ETTm2, Electricity, Traffic, Weather, Exchange-Rate, and ILI. It evaluates the model families requested in the task with Darts implementations and reports MAE, MSE, training time, and inference time.
+
+\section{AutoARIMA}
+AutoARIMA is a classical statistical model that automatically selects ARIMA orders by minimizing an information criterion. ARIMA combines autoregressive terms, differencing to reduce non-stationarity, and moving-average terms for residual dynamics. In this benchmark, AutoARIMA is used as a non-neural baseline and is fit per target component when the series is multivariate.
+
+\section{Linear}
+The Linear baseline in Darts is implemented with linear regression over lagged observations. Given an input window of length $L$, the model learns a direct linear mapping to the forecast horizon $H$. It provides a simple reference point with low model complexity and fast inference.
+
+\section{NLinear}
+NLinear is a normalization-aware linear architecture. It removes a per-window level component before linear projection and then restores the level in the forecast space. This design targets distribution-shift robustness and is directly aligned with the motivation in the paper for non-stationary time series.
+
+\section{DLinear}
+DLinear explicitly decomposes input into trend and seasonal components, applies linear projections to each component, and combines the outputs. This decomposition mechanism is designed to capture low-frequency trend and high-frequency seasonal behavior with lightweight linear heads.
+
+\section{RNN (LSTM and GRU)}
+RNN models in this benchmark use Darts' recurrent framework with two recurrent cell variants:
+\begin{itemize}
+    \item \textbf{LSTM}: adds gated memory cells (input, forget, output gates) to reduce vanishing gradients and improve long-range dependence handling.
+    \item \textbf{GRU}: uses update and reset gates with a simpler state transition, often offering similar accuracy with fewer parameters and lower compute.
+\end{itemize}
+Both are sequence models trained on rolling input chunks and produce multi-step forecasts.
+
+\section{N-BEATS}
+N-BEATS is a deep residual forecasting architecture built from fully-connected blocks. Each block emits a backcast and forecast; stacked residual refinement progressively improves forecasting accuracy. The model is flexible and can capture both generic nonlinear patterns and interpretable trend/seasonality variants.
+
+\section{Transformer}
+The Transformer model uses self-attention to mix temporal information across the input window and a sequence-to-sequence decoder for horizon generation. Multi-head attention and feed-forward sublayers provide expressive capacity for long-range interactions, while positional information is required to preserve ordering.
+
+\section{Metrics and timing}
+For each dataset--horizon--model combination, the benchmark records:
+\begin{itemize}
+    \item \textbf{MAE}: mean absolute error over the predicted horizon.
+    \item \textbf{MSE}: mean squared error over the predicted horizon.
+    \item \textbf{train\_time}: wall-clock seconds spent in model fitting.
+    \item \textbf{inference\_time}: wall-clock seconds to produce one horizon forecast.
+\end{itemize}
+All measurements are exported to CSV files for reproducible comparison.
+
+\end{document}
