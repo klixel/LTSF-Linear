@@ -325,7 +325,7 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
-    started_at = pd.Timestamp.utcnow().isoformat()
+    started_at = pd.Timestamp.now(tz="UTC").isoformat()
     df = run_benchmark(args)
 
     output_csv = Path(args.output_csv)
@@ -350,7 +350,7 @@ def main() -> None:
 
     metadata = {
         "started_at_utc": started_at,
-        "finished_at_utc": pd.Timestamp.utcnow().isoformat(),
+        "finished_at_utc": pd.Timestamp.now(tz="UTC").isoformat(),
         "data_root": str(Path(args.data_root).resolve()),
         "datasets": args.datasets,
         "models": args.models,
