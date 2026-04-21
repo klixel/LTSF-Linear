@@ -1,0 +1,47 @@
+\section{Introduction}
+\label{sec:intro}
+
+
+Time series are ubiquitous in today's data-driven world. Given historical data, time series forecasting (TSF) is a long-standing task that
+%to help with decision-making, risk management, and planning ahead of time. Meanwhile, it 
+has a wide range of applications, including but not limited to traffic flow estimation, energy management, and financial investment.
+%
+Over the past several decades, TSF solutions have undergone a progression from traditional statistical methods (e.g., ARIMA~\cite{ariyo2014arima}) and machine learning techniques (e.g., GBRT~\cite{gbrt}) to deep learning-based solutions, e.g., Recurrent Neural Networks~\cite{GuokunLai2017lstm} and Temporal Convolutional Networks~\cite{bai2018empirical,liu2021time}. 
+%
+
+Transformer~\cite{vaswani2017attention} is arguably the most successful sequence modeling architecture, demonstrating unparalleled performances in various applications, such as natural language processing (NLP)~\cite{devlin2018bert}, speech recognition~\cite{dong2018speech}, and computer vision~\cite{liu2021swin,zeng2022deciwatch}. 
+%
+Recently, there has also been a surge of Transformer-based solutions for time series analysis, as surveyed in ~\cite{wen2022transformers}. Most notable models, which focus on the less explored and challenging long-term time series forecasting (LTSF) problem, include LogTrans~\cite{li2019LogTrans} (NeurIPS 2019), Informer~\cite{informer} (AAAI 2021 Best paper), Autoformer~\cite{xu2021autoformer} (NeurIPS 2021), Pyraformer~\cite{liu2021pyraformer} (ICLR 2022 Oral), Triformer~\cite{cirstea2022triformer} (IJCAI 2022) and the recent FEDformer~\cite{zhou2022fedformer} (ICML 2022). 
+
+
+The main working power of Transformers is from its multi-head self-attention mechanism, which has a remarkable capability of extracting semantic correlations among elements in a long sequence (e.g., words in texts or 2D patches in images). However, self-attention is \emph{permutation-invariant} and ``anti-order'' to some extent. While using various types of positional encoding techniques can preserve some ordering information, it is still inevitable to have temporal information loss after applying self-attention on top of them. This is usually not a serious concern for semantic-rich applications such as NLP, e.g., the semantic meaning of a sentence is largely preserved even if we reorder some words in it. However, when analyzing time series data, there is usually a lack of semantics in the numerical data itself, and we are mainly interested in modeling the temporal changes among \emph{a continuous set of points}. That is, the order itself plays the most crucial role. Consequently, we pose the following intriguing question: \textbf{\emph{Are Transformers really effective for long-term time series forecasting?}}
+
+
+Moreover, while existing Transformer-based LTSF solutions have demonstrated considerable prediction accuracy improvements over traditional methods, 
+%
+in their experiments, all the compared (non-Transformer) baselines perform autoregressive or iterated multi-step (IMS) forecasting~\cite{ariyo2014arima,DavidSalinas2017DeepARPF,DzmitryBahdanau2014NeuralMT,SeanJTaylor2017ForecastingAS}, which are known to suffer from significant error accumulation effects for the LTSF problem. Therefore, in this work, we challenge Transformer-based LTSF solutions with direct multi-step (DMS) forecasting strategies to validate their real performance.  
+
+Not all time series are predictable, let alone long-term forecasting (e.g., for chaotic systems). We hypothesize that long-term forecasting is only feasible for those time series with a relatively clear trend and periodicity. As linear models can already extract such information, we introduce a set of embarrassingly simple models named \textbf{\modelname} as a new baseline for comparison. 
+%\modelname decomposes the time series into a trend and a remainder series and employs two one-layer linear networks to model these two series
+\modelname regresses historical time series with a one-layer linear model to forecast future time series directly. We conduct extensive experiments on nine widely-used benchmark datasets that cover various real-life applications: traffic, energy, economics, weather, and disease predictions.
+%Moreover, we conduct comprehensive empirical studies to explore the impacts of various design elements of LTSF models on their temporal relation extraction capability.
+Surprisingly, our results show that \modelname outperforms existing complex Transformer-based models \emph{in all cases, and often by a large margin (20\% $\sim$ 50\%)}. 
+%In particular, for the Exchange-Rate dataset that is noisy and does not have obvious periodicity, the prediction errors of the state-of-the-art FEDformer~\cite{zhou2022fedformer} are about twice larger than those of \modelname. 
+Moreover, we find that, in contrast to the claims in existing Transformers, most of them fail to extract temporal relations from long sequences, i.e., the forecasting errors are not reduced (sometimes even increased) with the increase of look-back window sizes. Finally, we conduct various ablation studies on existing Transformer-based TSF solutions to study the impact of various design elements in them. 
+
+To sum up, the contributions of this work include:
+
+% \vspace{-0.1cm}
+\begin{itemize}
+
+\item To the best of our knowledge, this is the first work to challenge the effectiveness of the booming Transformers for the long-term time series forecasting task. 
+
+\item To validate our claims, we introduce a set of embarrassingly simple one-layer linear models, named \modelname, and compare them with existing Transformer-based LTSF solutions on nine benchmarks. \modelname can be a new baseline for the LTSF problem.
+
+\item We conduct comprehensive empirical studies on various aspects of existing Transformer-based solutions, including the capability of modeling long inputs, the sensitivity to time series order, the impact of positional encoding and sub-series embedding, and efficiency comparisons. Our findings would benefit future research in this area. %\TODO{details}
+
+
+\end{itemize}
+
+With the above, we conclude that \emph{the temporal modeling capabilities of Transformers for time series are exaggerated, at least for the existing LTSF benchmarks}. At the same time, while \modelname achieves a better prediction accuracy compared to existing works, it merely serves as a simple baseline for future research on the challenging long-term TSF problem. With our findings, we also advocate revisiting the validity of Transformer-based solutions for other time series analysis tasks in the future.
+

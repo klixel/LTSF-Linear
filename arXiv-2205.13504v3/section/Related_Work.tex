@@ -1,0 +1,14 @@
+\section{Preliminaries: TSF Problem Formulation}
+\label{sec:related}
+
+\label{sec:pre_problem}
+For time series containing $C$ variates, given historical data $\cX=\{X^t_{1}, ..., X^t_{C}\}{_{t=1}^{L}}$, wherein $L$ is the look-back window size and  $X^t_{i}$ is the value of the $i_{th}$ variate at the $t_{th}$ time step. The time series forecasting task is to predict the values $\hat{\cX}=\{\hat{X}^t_{1}, ..., \hat{X}^t_{C}\}{_{t=L+1}^{L+T}}$ at the $T$ future time steps. 
+%
+When $T>1$, iterated multi-step (IMS) forecasting~\cite{taieb2012recursive} learns a single-step forecaster and iteratively applies it to obtain multi-step predictions. Alternatively, direct multi-step (DMS) forecasting~\cite{chevillon2007direct} directly optimizes the multi-step forecasting objective at once. 
+
+
+Compared to DMS forecasting results, IMS predictions have smaller variance thanks to the autoregressive estimation procedure, but they inevitably suffer from error accumulation effects. Consequently, IMS forecasting is preferable when there is a highly-accurate single-step forecaster, and $T$ is relatively small. In contrast, DMS forecasting generates more accurate predictions when it is hard to obtain an unbiased single-step forecasting model, or $T$ is large. 
+
+
+
+

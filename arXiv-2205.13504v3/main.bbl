@@ -1,0 +1,192 @@
+\begin{thebibliography}{10}\itemsep=-1pt
+
+\bibitem{ariyo2014arima}
+Adebiyi~A Ariyo, Adewumi~O Adewumi, and Charles~K Ayo.
+\newblock Stock price prediction using the arima model.
+\newblock In {\em 2014 UKSim-AMSS 16th International Conference on Computer
+  Modelling and Simulation}, pages 106--112. IEEE, 2014.
+
+\bibitem{DzmitryBahdanau2014NeuralMT}
+Dzmitry Bahdanau, Kyunghyun Cho, and Yoshua Bengio.
+\newblock Neural machine translation by jointly learning to align and
+  translate.
+\newblock {\em arXiv: Computation and Language}, 2014.
+
+\bibitem{bai2018empirical}
+Shaojie Bai, J~Zico Kolter, and Vladlen Koltun.
+\newblock An empirical evaluation of generic convolutional and recurrent
+  networks for sequence modeling.
+\newblock {\em arXiv preprint arXiv:1803.01271}, 2018.
+
+\bibitem{chevillon2007direct}
+Guillaume Chevillon.
+\newblock Direct multi-step estimation and forecasting.
+\newblock {\em Journal of Economic Surveys}, 21(4):746--785, 2007.
+
+\bibitem{cirstea2022triformer}
+Razvan-Gabriel Cirstea, Chenjuan Guo, Bin Yang, Tung Kieu, Xuanyi Dong, and
+  Shirui Pan.
+\newblock Triformer: Triangular, variable-specific attentions for long sequence
+  multivariate time series forecasting--full version.
+\newblock {\em arXiv preprint arXiv:2204.13767}, 2022.
+
+\bibitem{RBCleveland1990STLA}
+R.~B. Cleveland.
+\newblock Stl : A seasonal-trend decomposition procedure based on loess.
+\newblock {\em Journal of Office Statistics}, 1990.
+
+\bibitem{devlin2018bert}
+Jacob Devlin, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova.
+\newblock Bert: Pre-training of deep bidirectional transformers for language
+  understanding.
+\newblock {\em arXiv preprint arXiv:1810.04805}, 2018.
+
+\bibitem{dong2018speech}
+Linhao Dong, Shuang Xu, and Bo Xu.
+\newblock Speech-transformer: a no-recurrence sequence-to-sequence model for
+  speech recognition.
+\newblock In {\em 2018 IEEE International Conference on Acoustics, Speech and
+  Signal Processing (ICASSP)}, pages 5884--5888. IEEE, 2018.
+
+\bibitem{dong2008granular}
+Ruijun Dong and Witold Pedrycz.
+\newblock A granular time series approach to long-term forecasting and trend
+  forecasting.
+\newblock {\em Physica A: Statistical Mechanics and its Applications},
+  387(13):3253--3270, 2008.
+
+\bibitem{elsayed2021we}
+Shereen Elsayed, Daniela Thyssens, Ahmed Rashed, Hadi~Samer Jomaa, and Lars
+  Schmidt-Thieme.
+\newblock Do we really need deep learning models for time series forecasting?
+\newblock {\em arXiv preprint arXiv:2101.02118}, 2021.
+
+\bibitem{gbrt}
+Jerome~H Friedman.
+\newblock Greedy function approximation: a gradient boosting machine.
+\newblock {\em Annals of statistics}, pages 1189--1232, 2001.
+
+\bibitem{gardner1985exponential}
+Everette~S Gardner~Jr.
+\newblock Exponential smoothing: The state of the art.
+\newblock {\em Journal of forecasting}, 4(1):1--28, 1985.
+
+\bibitem{hamilton2020time}
+James~Douglas Hamilton.
+\newblock {\em Time series analysis}.
+\newblock Princeton university press, 2020.
+
+\bibitem{harvey1990forecasting}
+Andrew~C Harvey.
+\newblock Forecasting, structural time series models and the kalman filter.
+\newblock 1990.
+
+\bibitem{GuokunLai2017lstm}
+Guokun Lai, Wei-Cheng Chang, Yiming Yang, and Hanxiao Liu.
+\newblock Modeling long- and short-term temporal patterns with deep neural
+  networks.
+\newblock {\em international acm sigir conference on research and development
+  in information retrieval}, 2017.
+
+\bibitem{li2019LogTrans}
+Shiyang Li, Xiaoyong Jin, Yao Xuan, Xiyou Zhou, Wenhu Chen, Yu-Xiang Wang, and
+  Xifeng Yan.
+\newblock Enhancing the locality and breaking the memory bottleneck of
+  transformer on time series forecasting.
+\newblock {\em Advances in Neural Information Processing Systems}, 32, 2019.
+
+\bibitem{liu2021time}
+Minhao Liu, Ailing Zeng, Zhijian Xu, Qiuxia Lai, and Qiang Xu.
+\newblock Time series is a special sequence: Forecasting with sample
+  convolution and interaction.
+\newblock {\em arXiv preprint arXiv:2106.09305}, 2021.
+
+\bibitem{liu2021pyraformer}
+Shizhan Liu, Hang Yu, Cong Liao, Jianguo Li, Weiyao Lin, Alex~X Liu, and
+  Schahram Dustdar.
+\newblock Pyraformer: Low-complexity pyramidal attention for long-range time
+  series modeling and forecasting.
+\newblock In {\em International Conference on Learning Representations}, 2021.
+
+\bibitem{liu2021swin}
+Ze Liu, Yutong Lin, Yue Cao, Han Hu, Yixuan Wei, Zheng Zhang, Stephen Lin, and
+  Baining Guo.
+\newblock Swin transformer: Hierarchical vision transformer using shifted
+  windows.
+\newblock In {\em Proceedings of the IEEE/CVF International Conference on
+  Computer Vision}, pages 10012--10022, 2021.
+
+\bibitem{minhao2021t}
+LIU Minhao, Ailing Zeng, LAI Qiuxia, Ruiyuan Gao, Min Li, Jing Qin, and Qiang
+  Xu.
+\newblock T-wavenet: A tree-structured wavelet neural network for time series
+  signal analysis.
+\newblock In {\em International Conference on Learning Representations}, 2021.
+
+\bibitem{petnehazi2019recurrent}
+G{\'a}bor Petneh{\'a}zi.
+\newblock Recurrent neural networks for time series forecasting.
+\newblock {\em arXiv preprint arXiv:1901.00069}, 2019.
+
+\bibitem{DavidSalinas2017DeepARPF}
+David Salinas, Valentin Flunkert, and Jan Gasthaus.
+\newblock Deepar: Probabilistic forecasting with autoregressive recurrent
+  networks.
+\newblock {\em International Journal of Forecasting}, 2017.
+
+\bibitem{taieb2012recursive}
+Souhaib~Ben Taieb, Rob~J Hyndman, et~al.
+\newblock {\em Recursive and direct multi-step forecasting: the best of both
+  worlds}, volume~19.
+\newblock Citeseer, 2012.
+
+\bibitem{SeanJTaylor2017ForecastingAS}
+Sean~J. Taylor and Benjamin Letham.
+\newblock Forecasting at scale.
+\newblock {\em PeerJ Prepr.}, 2017.
+
+\bibitem{van2020evaluation}
+Gerrit~JJ van~den Burg and Christopher~KI Williams.
+\newblock An evaluation of change point detection algorithms.
+\newblock {\em arXiv preprint arXiv:2003.06222}, 2020.
+
+\bibitem{vaswani2017attention}
+Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones,
+  Aidan~N Gomez, {\L}ukasz Kaiser, and Illia Polosukhin.
+\newblock Attention is all you need.
+\newblock {\em Advances in neural information processing systems}, 30, 2017.
+
+\bibitem{wen2022transformers}
+Qingsong Wen, Tian Zhou, Chaoli Zhang, Weiqi Chen, Ziqing Ma, Junchi Yan, and
+  Liang Sun.
+\newblock Transformers in time series: A survey.
+\newblock {\em arXiv preprint arXiv:2202.07125}, 2022.
+
+\bibitem{xu2021autoformer}
+Jiehui Xu, Jianmin Wang, Mingsheng Long, et~al.
+\newblock Autoformer: Decomposition transformers with auto-correlation for
+  long-term series forecasting.
+\newblock {\em Advances in Neural Information Processing Systems}, 34, 2021.
+
+\bibitem{zeng2022deciwatch}
+Ailing Zeng, Xuan Ju, Lei Yang, Ruiyuan Gao, Xizhou Zhu, Bo Dai, and Qiang Xu.
+\newblock Deciwatch: A simple baseline for 10x efficient 2d and 3d pose
+  estimation.
+\newblock {\em arXiv preprint arXiv:2203.08713}, 2022.
+
+\bibitem{informer}
+Haoyi Zhou, Shanghang Zhang, Jieqi Peng, Shuai Zhang, Jianxin Li, Hui Xiong,
+  and Wancai Zhang.
+\newblock Informer: Beyond efficient transformer for long sequence time-series
+  forecasting.
+\newblock In {\em The Thirty-Fifth {AAAI} Conference on Artificial
+  Intelligence, {AAAI} 2021, Virtual Conference}, volume~35, pages
+  11106--11115. {AAAI} Press, 2021.
+
+\bibitem{zhou2022fedformer}
+Tian Zhou, Ziqing Ma, Qingsong Wen, Xue Wang, Liang Sun, and Rong Jin.
+\newblock Fedformer: Frequency enhanced decomposed transformer for long-term
+  series forecasting.
+\newblock In {\em International Conference on Machine Learning}, 2022.
+
+\end{thebibliography}

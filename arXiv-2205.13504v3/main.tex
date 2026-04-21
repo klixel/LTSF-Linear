@@ -1,0 +1,150 @@
+
+\documentclass[10pt,twocolumn,letterpaper]{article}
+% Include other packages here, before hyperref.
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{verbatim}
+
+% \usepackage{xcolor}         % colors
+\usepackage{subfigure}
+
+\usepackage{wrapfig}
+\usepackage{times}
+\usepackage{epsfig}
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+%%%%%%%%% PAPER TYPE  - PLEASE UPDATE FOR FINAL VERSION
+% \usepackage[review]{cvpr}      % To produce the REVIEW version
+%\usepackage{cvpr}              % To produce the CAMERA-READY version
+\usepackage[pagenumbers]{cvpr} % To force page numbers, e.g. for an arXiv version
+
+
+\usepackage{siunitx}
+\usepackage{cite}
+\usepackage{ctable}
+\usepackage{hhline}
+\usepackage{booktabs}
+
+\usepackage{csquotes}
+\usepackage{pifont}
+\usepackage{mathtools}
+\usepackage{animate}
+\newlength{\itemwidth}
+\usepackage{anyfontsize}
+\usepackage[super]{nth}
+
+\usepackage{ctable}
+\usepackage{soul}
+\usepackage{multicol}
+\usepackage{makecell}
+\usepackage[normalem]{ulem}
+\usepackage{multirow}
+\usepackage{float}
+\usepackage{stfloats}
+
+\usepackage{stmaryrd}
+\usepackage{mathstyle}
+
+\definecolor{Gray}{gray}{0.9}
+
+\newcommand{\misscite}{\textcolor{red}{[C]~}}
+\newcommand{\missref}{\textcolor{red}{[R]~}}
+\newcommand{\missvalue}{\textcolor{red}{[V]~}}
+
+\providecommand{\ie}{\textit{i.e.}\@\xspace}
+\providecommand{\eg}{\textit{e.g.}\@\xspace}
+\providecommand{\etal}{\textit{et al}\@\xspace}
+
+\usepackage{xcolor}         % colors
+\usepackage{color, colortbl}
+\definecolor{red}{RGB}{178,34,34}
+\definecolor{blue}{RGB}{0,0,255}
+\newcommand{\TODO}[1]{\textcolor{red}{(TODO: #1)}}
+\usepackage{xspace}
+\usepackage{mmstyle}
+\usepackage{multirow}
+ \usepackage{threeparttable} 
+\usepackage{subfigure} % 子图包
+% It is strongly recommended to use hyperref, especially for the review version.
+% hyperref with option pagebackref eases the reviewers' job.
+% Please disable hyperref *only* if you encounter grave issues, e.g. with the
+% file validation for the camera-ready version.
+%
+% If you comment hyperref and then uncomment it, you should delete
+% ReviewTempalte.aux before re-running LaTeX.
+% (Or just hit 'q' on the first LaTeX run, let it finish, and you
+%  should be clear).
+\usepackage[pagebackref,breaklinks,colorlinks]{hyperref}
+
+% Support for easy cross-referencing
+\usepackage[capitalize]{cleveref}
+\crefname{section}{Sec.}{Secs.}
+\Crefname{section}{Section}{Sections}
+\Crefname{table}{Table}{Tables}
+\crefname{table}{Tab.}{Tabs.}
+
+
+
+\newcommand{\modelname}{\emph{LTSF-Linear}\xspace}
+\begin{document}
+
+
+\title{Are Transformers Effective for Time Series Forecasting?}
+
+\newcommand*{\affaddr}[1]{#1} % No op here. Customize it for different styles.
+\newcommand*{\affmark}[1][*]{\textsuperscript{#1}}
+\newcommand*{\email}[1]{\texttt{#1}}
+
+\makeatletter
+\newcommand{\printfnsymbol}[1]{%
+  \textsuperscript{\@fnsymbol{#1}}%
+}
+\makeatother
+
+\author{%
+Ailing Zeng\affmark[1]\thanks{Equal contribution} , Muxi Chen\affmark[1]\printfnsymbol{1}, Lei Zhang\affmark[2], Qiang Xu\affmark[1]\\
+\affaddr{\affmark[1]The Chinese University of Hong Kong}\\
+\affaddr{\affmark[2]International Digital Economy Academy (IDEA)}\\
+\email{\tt\small\{alzeng, mxchen21, qxu\}@cse.cuhk.edu.hk}\\
+\email{\tt\small\{leizhang\}@idea.edu.cn}
+}
+
+
+
+% REMOVE THIS: bibentry
+% This is only needed to show inline citations in the guidelines document. You should not need it and can safely delete it.
+%\usepackage{bibentry}
+% END REMOVE bibentry
+
+
+\maketitle
+
+\begin{abstract}
+Recently, there has been a surge of Transformer-based solutions for the long-term time series forecasting (LTSF) task. Despite the growing performance over the past few years, \emph{we question the validity of this line of research in this work}.
+Specifically, Transformers is arguably the most successful solution to extract the semantic correlations among the elements in a long sequence. However, in time series modeling, we are to extract the temporal relations in \emph{an ordered set of continuous points}. While employing positional encoding and using tokens to embed sub-series in Transformers facilitate preserving some ordering information, the nature of the \emph{permutation-invariant} self-attention mechanism inevitably results in temporal information loss. 
+
+To validate our claim, we introduce a set of embarrassingly simple one-layer linear models named \emph{LTSF-Linear} for comparison. Experimental results on nine real-life datasets show that \emph{LTSF-Linear} surprisingly outperforms existing sophisticated Transformer-based LTSF models in all cases, and often by a large margin. Moreover, we conduct comprehensive empirical studies to explore the impacts of various design elements of LTSF models on their temporal relation extraction capability.
+We hope this surprising finding opens up new research directions for the LTSF task. We also advocate revisiting the validity of Transformer-based solutions for other time series analysis tasks (e.g., anomaly detection) in the future. Code is available at: \url{https://github.com/cure-lab/LTSF-Linear}.
+
+\end{abstract}
+
+
+\input{section/Introduction}
+\input{section/Related_Work}
+\input{section/Method}
+\input{section/DLinear}
+\input{section/Experiment}
+\input{section/Conclusion}
+\pagebreak
+% \widetext
+
+
+\input{section/supp}
+\input{main.bbl}
+\bibliographystyle{ieee_fullname}
+
+
+\end{document}
