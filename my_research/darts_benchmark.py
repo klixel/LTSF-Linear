@@ -257,7 +257,9 @@ def run_benchmark(args: argparse.Namespace) -> pd.DataFrame:
                             "error": "",
                         }
                     )
-                except Exception as exc:  # noqa: BLE001
+                except (KeyboardInterrupt, SystemExit):
+                    raise
+                except (ValueError, RuntimeError, ImportError, OSError, TypeError, AttributeError, IndexError) as exc:
                     rows.append(
                         {
                             "dataset": ds.name,
@@ -278,11 +280,15 @@ def run_benchmark(args: argparse.Namespace) -> pd.DataFrame:
 
 
 def parse_args() -> argparse.Namespace:
+    repo_root = Path(__file__).resolve().parents[1]
+    default_data_root = repo_root / "dataset"
+    default_output_dir = repo_root / "my_research" / "output"
+
     parser = argparse.ArgumentParser(description="Darts benchmark for datasets used in arXiv:2205.13504v3")
     parser.add_argument(
         "--data_root",
         type=str,
-        default="/home/runner/work/LTSF-Linear/LTSF-Linear/dataset",
+        default=str(default_data_root),
         help="Directory containing ETTh1.csv, ETTh2.csv, ETTm1.csv, ETTm2.csv, electricity.csv, traffic.csv, weather.csv, exchange_rate.csv, national_illness.csv",
     )
     parser.add_argument(
@@ -305,19 +311,19 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--output_csv",
         type=str,
-        default="/home/runner/work/LTSF-Linear/LTSF-Linear/my_research/output/benchmark_results.csv",
+        default=str(default_output_dir / "benchmark_results.csv"),
         help="CSV path for benchmark rows",
     )
     parser.add_argument(
         "--summary_csv",
         type=str,
-        default="/home/runner/work/LTSF-Linear/LTSF-Linear/my_research/output/benchmark_summary.csv",
+        default=str(default_output_dir / "benchmark_summary.csv"),
         help="CSV path for aggregated summary",
     )
     parser.add_argument(
         "--run_metadata_json",
         type=str,
-        default="/home/runner/work/LTSF-Linear/LTSF-Linear/my_research/output/run_metadata.json",
+        default=str(default_output_dir / "run_metadata.json"),
         help="JSON path for run metadata",
     )
     return parser.parse_args()

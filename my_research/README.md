@@ -44,17 +44,19 @@ pip install "u8darts[torch]" pmdarima
 Dry run (writes benchmark matrix without training):
 
 ```bash
-python /home/runner/work/LTSF-Linear/LTSF-Linear/my_research/darts_benchmark.py --dry_run
+python my_research/darts_benchmark.py --dry_run
 ```
 
 Full run:
 
 ```bash
-python /home/runner/work/LTSF-Linear/LTSF-Linear/my_research/darts_benchmark.py --epochs 10
+python my_research/darts_benchmark.py --epochs 10
 ```
 
 ## Output files
 
-- `/home/runner/work/LTSF-Linear/LTSF-Linear/my_research/output/benchmark_results.csv`
-- `/home/runner/work/LTSF-Linear/LTSF-Linear/my_research/output/benchmark_summary.csv`
-- `/home/runner/work/LTSF-Linear/LTSF-Linear/my_research/output/run_metadata.json`
+- `my_research/output/benchmark_results.csv`
+- `my_research/output/benchmark_summary.csv`
+- `my_research/output/run_metadata.json`
+
+> Note: after `--dry_run`, `benchmark_summary.csv` can contain only headers because no model training/evaluation rows are marked as `OK`.
