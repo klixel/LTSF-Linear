@@ -3,48 +3,141 @@
 \usepackage{amsmath,amssymb}
 \usepackage{booktabs}
 \usepackage{hyperref}
-\title{Detailed Model Notes for a Darts-Based LTSF Benchmark}
+\title{Detailed Technical Notes for a Darts-Based LTSF Benchmark}
 \date{}
 \begin{document}
 \maketitle
 
 \section{Benchmark scope and relation to arXiv:2205.13504v3}
-This benchmark follows the same nine datasets used in arXiv:2205.13504v3: ETTh1, ETTh2, ETTm1, ETTm2, Electricity, Traffic, Weather, Exchange-Rate, and ILI. It evaluates the model families requested in the task with Darts implementations and reports MAE, MSE, training time, and inference time.
+This benchmark follows the same nine datasets used in arXiv:2205.13504v3: ETTh1, ETTh2, ETTm1, ETTm2, Electricity, Traffic, Weather, Exchange-Rate, and ILI. For each dataset, the benchmark evaluates AutoARIMA, Linear, NLinear, DLinear, LSTM, GRU, N-BEATS, and Transformer using Darts, and reports MAE, MSE, training time, and inference time.
+
+Let an input window be $\mathbf{x}_{t-L+1:t}\in\mathbb{R}^{L\times C}$ with look-back length $L$ and $C$ channels, and the forecast horizon be $H$. Each model produces
+\[
+\hat{\mathbf{y}}_{t+1:t+H} = f_\theta(\mathbf{x}_{t-L+1:t}), \quad \hat{\mathbf{y}}\in\mathbb{R}^{H\times C}.
+\]
 
 \section{AutoARIMA}
-AutoARIMA is a classical statistical model that automatically selects ARIMA orders by minimizing an information criterion. ARIMA combines autoregressive terms, differencing to reduce non-stationarity, and moving-average terms for residual dynamics. In this benchmark, AutoARIMA is used as a non-neural baseline and is fit per target component when the series is multivariate.
+\subsection{Core model}
+ARIMA$(p,d,q)$ models one scalar time series (or one channel) after differencing order $d$:
+\[
+\phi(B)(1-B)^d y_t = c + \theta(B)\varepsilon_t,
+\]
+where $B$ is the backshift operator, $\phi(B)=1-\phi_1B-\cdots-\phi_pB^p$, and $\theta(B)=1+\theta_1B+\cdots+\theta_qB^q$.
 
-\section{Linear}
-The Linear baseline in Darts is implemented with linear regression over lagged observations. Given an input window of length $L$, the model learns a direct linear mapping to the forecast horizon $H$. It provides a simple reference point with low model complexity and fast inference.
+\subsection{Why ``Auto''}
+AutoARIMA performs order selection over candidate $(p,d,q)$ (and seasonal terms if enabled), typically minimizing AIC/AICc/BIC while checking stationarity/invertibility constraints. The benchmark uses it as a classical non-neural baseline. For multivariate series, a separate model is fit per channel and channel forecasts are stacked.
+
+\subsection{Strengths and limitations}
+AutoARIMA is data-efficient and interpretable for linear autocorrelation structures, but can underfit strong nonlinearities and long multivariate cross-channel interactions.
+
+\section{Linear (lagged linear regression)}
+The Linear baseline uses lagged values as features and predicts a multi-step target with a linear map:
+\[
+\mathrm{vec}(\hat{\mathbf{y}})=\mathbf{W}\,\mathrm{vec}(\mathbf{x})+\mathbf{b}.
+\]
+In Darts this is implemented as a regression model with lag features. Training is convex (least-squares style objective under default settings), giving stable optimization and fast fitting/inference.
+
+This baseline answers an important question: how far can purely linear temporal projection go before architectural complexity is needed?
 
 \section{NLinear}
-NLinear is a normalization-aware linear architecture. It removes a per-window level component before linear projection and then restores the level in the forecast space. This design targets distribution-shift robustness and is directly aligned with the motivation in the paper for non-stationary time series.
+NLinear (Normalization-Linear) reduces local level shift before linear mapping. For each channel, define the last observed value in the look-back window as $x_t$. Normalize:
+\[
+\tilde{\mathbf{x}} = \mathbf{x} - x_t\mathbf{1}_L.
+\]
+Apply a learned linear projection $g_\theta$ to $\tilde{\mathbf{x}}$, then restore level:
+\[
+\hat{\mathbf{y}} = g_\theta(\tilde{\mathbf{x}}) + x_t\mathbf{1}_H.
+\]
+
+This explicitly targets distribution shift in absolute level between train and test windows. Compared with plain Linear, NLinear changes the inductive bias from ``fit absolute scale'' to ``fit local deviations from current level.''
 
 \section{DLinear}
-DLinear explicitly decomposes input into trend and seasonal components, applies linear projections to each component, and combines the outputs. This decomposition mechanism is designed to capture low-frequency trend and high-frequency seasonal behavior with lightweight linear heads.
+DLinear (Decomposition-Linear) first decomposes input into trend and seasonal/remainder components using moving average:
+\[
+\mathbf{x}^{\text{trend}}=\mathrm{MA}(\mathbf{x}),\qquad
+\mathbf{x}^{\text{season}}=\mathbf{x}-\mathbf{x}^{\text{trend}}.
+\]
+Then two separate linear heads are learned:
+\[
+\hat{\mathbf{y}}=g^{\text{trend}}_\theta(\mathbf{x}^{\text{trend}})+g^{\text{season}}_\theta(\mathbf{x}^{\text{season}}).
+\]
 
-\section{RNN (LSTM and GRU)}
-RNN models in this benchmark use Darts' recurrent framework with two recurrent cell variants:
-\begin{itemize}
-    \item \textbf{LSTM}: adds gated memory cells (input, forget, output gates) to reduce vanishing gradients and improve long-range dependence handling.
-    \item \textbf{GRU}: uses update and reset gates with a simpler state transition, often offering similar accuracy with fewer parameters and lower compute.
-\end{itemize}
-Both are sequence models trained on rolling input chunks and produce multi-step forecasts.
+The decomposition imposes a useful bias: low-frequency trend and high-frequency residual dynamics are modeled with different parameter sets. This often improves robustness on data where trend drift and periodic components coexist.
+
+\section{RNN family: LSTM and GRU}
+RNNs model temporal state recursively:
+\[
+\mathbf{h}_t=\Psi(\mathbf{x}_t,\mathbf{h}_{t-1}).
+\]
+They share parameters across time and naturally support variable sequence lengths.
+
+\subsection{LSTM}
+LSTM introduces memory cell $\mathbf{c}_t$ and gates:
+\begin{align*}
+\mathbf{i}_t &= \sigma(\mathbf{W}_i[\mathbf{x}_t,\mathbf{h}_{t-1}] + \mathbf{b}_i),\\
+\mathbf{f}_t &= \sigma(\mathbf{W}_f[\mathbf{x}_t,\mathbf{h}_{t-1}] + \mathbf{b}_f),\\
+\mathbf{o}_t &= \sigma(\mathbf{W}_o[\mathbf{x}_t,\mathbf{h}_{t-1}] + \mathbf{b}_o),\\
+\tilde{\mathbf{c}}_t &= \tanh(\mathbf{W}_c[\mathbf{x}_t,\mathbf{h}_{t-1}] + \mathbf{b}_c),\\
+\mathbf{c}_t &= \mathbf{f}_t\odot\mathbf{c}_{t-1} + \mathbf{i}_t\odot\tilde{\mathbf{c}}_t,\\
+\mathbf{h}_t &= \mathbf{o}_t\odot\tanh(\mathbf{c}_t).
+\end{align*}
+The additive memory update helps gradient flow across long contexts.
+
+\subsection{GRU}
+GRU simplifies gating with no separate cell state:
+\begin{align*}
+\mathbf{z}_t &= \sigma(\mathbf{W}_z[\mathbf{x}_t,\mathbf{h}_{t-1}] + \mathbf{b}_z),\\
+\mathbf{r}_t &= \sigma(\mathbf{W}_r[\mathbf{x}_t,\mathbf{h}_{t-1}] + \mathbf{b}_r),\\
+\tilde{\mathbf{h}}_t &= \tanh(\mathbf{W}_h[\mathbf{x}_t,\mathbf{r}_t\odot\mathbf{h}_{t-1}] + \mathbf{b}_h),\\
+\mathbf{h}_t &= (1-\mathbf{z}_t)\odot\mathbf{h}_{t-1}+\mathbf{z}_t\odot\tilde{\mathbf{h}}_t.
+\end{align*}
+GRU often trains faster than LSTM for similar hidden widths.
+
+\subsection{Forecasting behavior}
+In Darts RNN forecasting, models are trained on sliding windows and produce multi-step outputs autoregressively or chunk-wise depending on configuration. They are strong for smooth temporal dynamics but can be compute-heavy for very long horizons.
 
 \section{N-BEATS}
-N-BEATS is a deep residual forecasting architecture built from fully-connected blocks. Each block emits a backcast and forecast; stacked residual refinement progressively improves forecasting accuracy. The model is flexible and can capture both generic nonlinear patterns and interpretable trend/seasonality variants.
+N-BEATS uses stacks of fully-connected residual blocks. Each block receives an input representation $\mathbf{z}^{(k)}$ and outputs:
+\[
+\mathbf{b}^{(k)} \; (\text{backcast}),\qquad
+\mathbf{f}^{(k)} \; (\text{forecast}).
+\]
+Residual recursion:
+\[
+\mathbf{z}^{(k+1)} = \mathbf{z}^{(k)} - \mathbf{b}^{(k)},
+\]
+and total forecast:
+\[
+\hat{\mathbf{y}} = \sum_k \mathbf{f}^{(k)}.
+\]
+
+Intuition: each block explains part of the input history (backcast) and contributes forecast signal; later blocks model residual structure left by earlier blocks. This often gives strong accuracy without recurrent or attention modules.
 
 \section{Transformer}
-The Transformer model uses self-attention to mix temporal information across the input window and a sequence-to-sequence decoder for horizon generation. Multi-head attention and feed-forward sublayers provide expressive capacity for long-range interactions, while positional information is required to preserve ordering.
+\subsection{Attention mechanism}
+Given token embeddings $\mathbf{X}$, self-attention forms queries/keys/values:
+\[
+\mathbf{Q}=\mathbf{X}\mathbf{W}_Q,\quad
+\mathbf{K}=\mathbf{X}\mathbf{W}_K,\quad
+\mathbf{V}=\mathbf{X}\mathbf{W}_V,
+\]
+then computes
+\[
+\mathrm{Attn}(\mathbf{Q},\mathbf{K},\mathbf{V})=\mathrm{softmax}\!\left(\frac{\mathbf{Q}\mathbf{K}^\top}{\sqrt{d_k}}\right)\mathbf{V}.
+\]
+Multi-head attention concatenates several such projections, followed by feed-forward sublayers, residual connections, and normalization.
 
-\section{Metrics and timing}
-For each dataset--horizon--model combination, the benchmark records:
+\subsection{Forecasting interpretation}
+Transformer forecasting maps input windows to horizon outputs while using positional information to preserve temporal order. It is expressive for long-range interactions, but has higher optimization and compute cost than linear baselines on many LTSF settings.
+
+\section{Metrics and timing protocol}
+For each dataset--horizon--model run:
 \begin{itemize}
-    \item \textbf{MAE}: mean absolute error over the predicted horizon.
-    \item \textbf{MSE}: mean squared error over the predicted horizon.
-    \item \textbf{train\_time}: wall-clock seconds spent in model fitting.
-    \item \textbf{inference\_time}: wall-clock seconds to produce one horizon forecast.
+    \item \textbf{MAE}: $\frac{1}{N}\sum_i |y_i-\hat y_i|$.
+    \item \textbf{MSE}: $\frac{1}{N}\sum_i (y_i-\hat y_i)^2$.
+    \item \textbf{train\_time}: wall-clock time spent in model fitting.
+    \item \textbf{inference\_time}: wall-clock time for one $H$-step prediction pass.
 \end{itemize}
-All measurements are exported to CSV files for reproducible comparison.
+All run-level rows are written to CSV and aggregated summaries are computed over successful runs only.
 
 \end{document}
