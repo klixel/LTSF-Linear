@@ -1,0 +1,31 @@
+{
+  "started_at_utc": "2026-04-21T22:37:36.009253+00:00",
+  "finished_at_utc": "2026-04-21T22:37:36.020122+00:00",
+  "data_root": "/home/runner/work/LTSF-Linear/LTSF-Linear/dataset",
+  "datasets": [
+    "ETTh1",
+    "ETTh2",
+    "ETTm1",
+    "ETTm2",
+    "Electricity",
+    "Traffic",
+    "Weather",
+    "Exchange-Rate",
+    "ILI"
+  ],
+  "models": [
+    "AutoARIMA",
+    "Linear",
+    "NLinear",
+    "DLinear",
+    "LSTM",
+    "GRU",
+    "N-BEATS",
+    "Transformer"
+  ],
+  "epochs": 10,
+  "seed": 42,
+  "dry_run": true,
+  "rows": 288,
+  "ok_rows": 0
+}

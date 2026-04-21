@@ -305,19 +305,19 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--output_csv",
         type=str,
-        default="/home/runner/work/LTSF-Linear/LTSF-Linear/my_research/results/benchmark_results.csv",
+        default="/home/runner/work/LTSF-Linear/LTSF-Linear/my_research/output/benchmark_results.csv",
         help="CSV path for benchmark rows",
     )
     parser.add_argument(
         "--summary_csv",
         type=str,
-        default="/home/runner/work/LTSF-Linear/LTSF-Linear/my_research/results/benchmark_summary.csv",
+        default="/home/runner/work/LTSF-Linear/LTSF-Linear/my_research/output/benchmark_summary.csv",
         help="CSV path for aggregated summary",
     )
     parser.add_argument(
         "--run_metadata_json",
         type=str,
-        default="/home/runner/work/LTSF-Linear/LTSF-Linear/my_research/results/run_metadata.json",
+        default="/home/runner/work/LTSF-Linear/LTSF-Linear/my_research/output/run_metadata.json",
         help="JSON path for run metadata",
     )
     return parser.parse_args()

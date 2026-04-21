@@ -14,7 +14,7 @@ This directory contains a Darts-based benchmark implementation aligned with the 
   - N-BEATS
   - Transformer
 - `model_explanations.tex`: detailed LaTeX explanation of every used model and the benchmark metric protocol.
-- `results/`: generated outputs (`benchmark_results.csv`, `benchmark_summary.csv`, `run_metadata.json`).
+- `output/`: generated outputs (`benchmark_results.csv`, `benchmark_summary.csv`, `run_metadata.json`).
 
 ## Datasets expected (same as paper)
 
@@ -55,6 +55,6 @@ python /home/runner/work/LTSF-Linear/LTSF-Linear/my_research/darts_benchmark.py 
 
 ## Output files
 
-- `/home/runner/work/LTSF-Linear/LTSF-Linear/my_research/results/benchmark_results.csv`
-- `/home/runner/work/LTSF-Linear/LTSF-Linear/my_research/results/benchmark_summary.csv`
-- `/home/runner/work/LTSF-Linear/LTSF-Linear/my_research/results/run_metadata.json`
+- `/home/runner/work/LTSF-Linear/LTSF-Linear/my_research/output/benchmark_results.csv`
+- `/home/runner/work/LTSF-Linear/LTSF-Linear/my_research/output/benchmark_summary.csv`
+- `/home/runner/work/LTSF-Linear/LTSF-Linear/my_research/output/run_metadata.json`
